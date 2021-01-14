@@ -1,1 +1,25 @@
 // app global css in Sass form
+@import "quasar.variables"
+
+@mixin disable-copy
+    -webkit-touch-callout: none
+    -webkit-user-select: none
+    -moz-user-select: none
+    -ms-user-select: none
+    user-select: none
+
+@mixin blur-background
+    transition: all .3s
+    background: rgb($dark, .3)
+    backdrop-filter: saturate(180%) blur(20px)
+    -webkit-backdrop-filter: saturate(180%) blur(20px)
+
+.disable-copy
+    @include disable-copy
+
+.q-dialog,
+.q-loading,
+.q-inner-loading
+    z-index: 9999
+    @include disable-copy
+    @include blur-background

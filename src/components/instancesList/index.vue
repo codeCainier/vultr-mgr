@@ -21,6 +21,10 @@
             <q-item-section side>
                 <q-badge :label="item.main_ip" />
             </q-item-section>
+
+            <q-inner-loading :showing="item.id === loadingItem">
+                <q-spinner-gears size="30px" color="primary" />
+            </q-inner-loading>
         </q-item>
     </q-list>
 </template>
@@ -31,6 +35,7 @@
         data() {
             return {
                 loading: false,
+                loadingItem: '',
                 instances: [],
             }
         },
@@ -62,6 +67,7 @@
                 })
             },
             handleClickItem(item) {
+                this.loadingItem = item.id
                 this.$emit('change', item)
             }
         },
