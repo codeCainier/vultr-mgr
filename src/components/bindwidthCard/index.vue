@@ -7,11 +7,11 @@
                     <div>{{ usedBandwidth }} / {{ allowedBandwidth() }}</div>
                 </div>
                 <q-space />
-                <div class="text-h4 text-weight-thin">{{ percent() }}</div>
+                <div class="text-h4 text-weight-light">{{ percent() }}</div>
             </div>
             <div class="full-width" style="height: 100px" ref="chart-bindwidth"></div>
         </q-card-section>
-        <q-inner-loading :showing="loading">
+        <q-inner-loading :showing="loading || !Object.keys(instance).length">
             <q-spinner-gears size="50px" color="primary" />
         </q-inner-loading>
     </q-card>

@@ -8,7 +8,12 @@
 
         <q-separator/>
 
-        <q-item v-ripple clickable v-for="item in instances" :key="item.id" @click="handleClickItem(item)">
+        <q-item v-ripple clickable
+                v-for="item in instances" 
+                :key="item.id"
+                class="item"
+                :class="{ active : item.id === activedItem }"
+                @click="handleClickItem(item)">
             <q-item-section avatar>
                 <q-icon color="primary" name="storage" />
             </q-item-section>
@@ -36,6 +41,7 @@
             return {
                 loading: false,
                 loadingItem: '',
+                activedItem: '',
                 instances: [],
             }
         },
@@ -58,15 +64,17 @@
                 this.loading = true
                 this.ajax.vultr.get({
                     url: '/proxy/vultr/instances',
-                    success: (res) => {
+                    success: res => {
                         this.instances = res.instances
+                        if (this.instances.length) this.handleClickItem(this.instances[0])
                     },
-                    finish: (res) => {
+                    finish: res => {
                         this.loading  = false
                     }
                 })
             },
             handleClickItem(item) {
+                this.activedItem = item.id
                 this.loadingItem = item.id
                 this.$emit('change', item)
             }
@@ -76,3 +84,8 @@
         }
     }
 </script>
+
+<style lang="stylus" scope>
+    .item.active
+        background: rgba($primary, .1)
+</style>

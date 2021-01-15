@@ -1,5 +1,26 @@
-import Vue        from 'vue'
-import { extend } from 'quasar'
+import Vue from 'vue'
+import { Dialog, extend } from 'quasar'
+
+function confirm(obj) {
+    Dialog.create({
+        title: obj.title || '提示',
+        message: obj.message || '',
+        cancel: !obj.cancel ? '' : '取消',
+        // ok: '确认',
+        persistent: true,
+    })
+        .onOk(() => {
+            if (obj.confirm) obj.confirm();
+        })
+        .onOk(() => {
+        })
+        .onCancel(() => {
+            if (obj.cancel) obj.cancel();
+        })
+        .onDismiss(() => {
+            if (obj.close) obj.close();
+        });
+}
 
 function clone (obj) {
     return extend(true, {}, obj);
@@ -137,6 +158,7 @@ function getUrlParams(url, name) {
 }
 
 export default {
+    confirm,
     clone,
     add0,
     formatFlow,

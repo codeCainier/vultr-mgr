@@ -16,7 +16,11 @@
                 </q-card>
             </div>
 
-            <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3" v-show="Object.keys(bandwidth).length">
+            <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+                <instance-detail :instance="instance"/>
+            </div>
+
+            <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
                 <bindwidth-card :bandwidth="bandwidth" 
                                 :instance="instance"
                                 :loading="loading"/>
@@ -29,6 +33,7 @@
     import userInfo from 'src/components/userInfo'
     import instancesList from 'src/components/instancesList'
     import bindWidthCard from 'src/components/bindwidthCard'
+    import instanceDetail from 'src/components/instanceDetail'
 
     export default {
         name: 'Home',
@@ -36,6 +41,7 @@
             'user-info': userInfo,
             'instances-list': instancesList,
             'bindwidth-card': bindWidthCard,
+            'instance-detail': instanceDetail,
         },
         data() {
             return {

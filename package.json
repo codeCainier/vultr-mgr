@@ -17,7 +17,8 @@
     "vue-i18n": "^8.0.0"
   },
   "devDependencies": {
-    "@quasar/app": "^2.0.0"
+    "@quasar/app": "^2.0.0",
+    "electron": "^11.2.0"
   },
   "browserslist": [
     "ie >= 11",

@@ -9,6 +9,13 @@ const vultrAxios = axios.create({
     }
 })
 
+const callback = (obj, res) => {
+    const status = 200 <= res.status && res.status
+    if (status && obj.success) obj.success(res.data)
+    if (!status && obj.error) obj.error(res)
+    if (obj.finish) obj.finish()
+}
+
 vultrAxios.interceptors.request.use(request => {
     return request
 }, error => Promise.reject(error))
@@ -16,8 +23,7 @@ vultrAxios.interceptors.request.use(request => {
 vultrAxios.interceptors.response.use(response => {
     return response
 }, error => {
-    // if (error.response.status !== 200) alert(error.response.data.error)
     return Promise.reject(error)
 })
 
-export default new Request(vultrAxios)
+export default new Request(vultrAxios, callback)
