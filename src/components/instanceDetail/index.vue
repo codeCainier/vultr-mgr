@@ -12,15 +12,18 @@
 
         <q-separator />
 
-        <q-card-actions>
-            <q-btn flat label="Ping"/>
+        <q-card-actions class="q-gutter-md">
+            <q-btn flat label="Ping" :loading="pingLoading" @click="ping"/>
+            <span v-show="pingTime">{{ pingTime }}</span>
             <q-space/>
-            <q-btn flat color="negative" @click="terminal">Terminal</q-btn>
+            <q-btn flat color="negative" @click="enterPass">输入密码</q-btn>
         </q-card-actions>
     </q-card>
 </template>
 
 <script>
+    import ping from 'ping'
+
     export default {
         name: 'InstanceDetail',
         props: {
@@ -31,6 +34,14 @@
         },
         data() {
             return {
+                pingLoading: false,
+                pingTime: '',
+            }
+        },
+        watch: {
+            instance() {
+                this.pingTime = ''
+                this.ping()
             }
         },
         computed: {
@@ -42,9 +53,14 @@
             },
         },
         methods: {
-            terminal() {
-                this.instance.kvm
-            }
+            async ping() {
+                this.pingLoading = true
+                const { time }   = (await ping.promise.probe(this.instance.main_ip))
+                this.pingTime    = time === 'unknown' ? 'Timeout' : time + 'ms'
+                this.pingLoading = false
+            },
+            enterPass() {
+            },
         },
         created() {
         }

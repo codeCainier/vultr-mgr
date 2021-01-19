@@ -35,6 +35,8 @@
     import bindWidthCard from 'src/components/bindwidthCard'
     import instanceDetail from 'src/components/instanceDetail'
 
+    const { NodeSSH } = require('node-ssh')
+
     export default {
         name: 'Home',
         components: {
@@ -48,9 +50,15 @@
                 bandwidth: {},
                 instance: {},
                 loading: false,
+                ssh: '',
             }
         },
         computed: {
+        },
+        watch: {
+            instance() {
+                this.sshLogin('codeMaster.95xingrong')
+            }
         },
         methods: {
             getDetails(item, finish) {
@@ -67,6 +75,33 @@
                     }
                 })
             },
+            sshLogin(password) {
+                this.ssh = new NodeSSH()
+                this.ssh.connect({
+                    host: this.instance.main_ip,
+                    username: 'root',
+                    port: '22',
+                    password,
+                    tryKeyboard: true,
+                    onKeyboardInteractive: (name, instructions, instructionsLang, prompts, finish) => {
+                        if (prompts.length > 0 && prompts[0].prompt.toLowerCase().includes('password')) finish([password])
+                    },
+                })
+                .then(() => {
+                    console.log('login success')
+                    this.getDiskStatus()
+                })
+                .catch((err) => {
+                    console.log(err);
+                })
+            },
+            getDiskStatus() {
+                const cmd = 'docker -v';
+                this.ssh.execCommand(cmd, { cwd: '/root' })
+                    .then(res => {
+                        console.log(res);
+                    });
+            }
         },
         created() {
         }
