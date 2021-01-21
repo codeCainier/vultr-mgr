@@ -7,7 +7,7 @@
 
                     <q-card-section class="q-gutter-sm">
                         <q-btn label="充值" size="sm" flat color="primary" />
-                        <q-btn label="新建" size="sm" flat />
+                        <q-btn label="新建" size="sm" flat @click="createInstancesList"/>
                     </q-card-section>
 
                     <q-separator />
@@ -34,6 +34,7 @@
     import instancesList from 'src/components/instancesList'
     import bindWidthCard from 'src/components/bindwidthCard'
     import instanceDetail from 'src/components/instanceDetail'
+    import startupScript from 'src/assets/startup'
 
     const { NodeSSH } = require('node-ssh')
 
@@ -92,15 +93,28 @@
                     this.getDiskStatus()
                 })
                 .catch((err) => {
-                    console.log(err);
+                    console.log(err)
                 })
             },
             getDiskStatus() {
-                const cmd = 'docker -v';
+                const cmd = 'docker -v'
                 this.ssh.execCommand(cmd, { cwd: '/root' })
                     .then(res => {
-                        console.log(res);
-                    });
+                        console.log(res)
+                    })
+            },
+            createInstancesList() {
+                this.ajax.vultr.post({
+                    url: '/proxy/vultr/startup-scripts',
+                    params: {
+                        name: 'Deploy SS & V2Rayxxx',
+                        type: 'boot',
+                        script: startupScript('codeMaster.95'),
+                    },
+                    success: res => {
+                        this.notify.success('操作成功')
+                    },
+                })
             }
         },
         created() {

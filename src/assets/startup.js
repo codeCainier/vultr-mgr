@@ -1,9 +1,7 @@
-const startupScript = `
+import tools from 'src/utils'
+
+export default password => tools.base64En(`
 #!/bin/sh
-
-# NOTE: This is an example that sets up SSH authorization. To use it, you'd need to replace "ssh-rsa AA... youremail@example.com" with your SSH public.
-# You can replace this entire script with anything you'd like, there is no need to keep it
-
 # Update apt-get
 apt-get update
 
@@ -26,7 +24,7 @@ services:
   - "8388:8388"
   - "8388:8388/udp"
   environment:
-  - PASSWORD=codeMaster.95
+  - PASSWORD=${password}
  # docker exec -it v2ray /bin/sh -c 'cat /etc/v2ray/config.json'
  v2ray:
   image: "v2ray/official"
@@ -37,12 +35,4 @@ services:
 ' > /root/docker-compose.yml
 
 # Create Docker Container
-docker-compose -f /root/docker-compose.yml up -d
-
-
-
-# mkdir -p /root/.ssh
-# chmod 600 /root/.ssh
-# echo ssh-rsa AA... youremail@example.com > /root/.ssh/authorized_keys
-# chmod 700 /root/.ssh/authorized_keys
-`
+docker-compose -f /root/docker-compose.yml up -d`)

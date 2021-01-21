@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import { Dialog, extend } from 'quasar'
+import CryptoJS from 'crypto-js'
 
 function confirm(obj) {
     Dialog.create({
@@ -24,6 +25,19 @@ function confirm(obj) {
 
 function clone (obj) {
     return extend(true, {}, obj);
+}
+
+/**
+ * Base64 加密
+ * @method
+ * @param       {String}    data    传入字符串
+ * @return      {string}            加密结果
+ * */
+function base64En(data) {
+    data = typeof data === 'string' ? data : JSON.stringify(data);
+    data = CryptoJS.enc.Utf8.parse(data);
+    return CryptoJS.enc.Base64.stringify(data)
+        .toString();
 }
 
 /**
@@ -160,6 +174,7 @@ function getUrlParams(url, name) {
 export default {
     confirm,
     clone,
+    base64En,
     add0,
     formatFlow,
     formatDate,

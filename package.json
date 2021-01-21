@@ -12,6 +12,7 @@
     "@quasar/extras": "^1.0.0",
     "axios": "^0.18.1",
     "core-js": "^3.6.5",
+    "crypto-js": "^4.0.0",
     "echarts": "^5.0.0",
     "node-ssh": "^11.1.1",
     "ping": "^0.4.0",
