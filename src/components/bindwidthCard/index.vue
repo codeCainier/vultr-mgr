@@ -1,5 +1,5 @@
 <template>
-    <q-card flat bordered>
+    <q-card flat bordered class="disable-copy">
         <q-card-section>
             <div class="row q-mb-md">
                 <div>
@@ -11,6 +11,7 @@
             </div>
             <div class="full-width" style="height: 100px" ref="chart-bindwidth"></div>
         </q-card-section>
+
         <q-inner-loading :showing="loading || !Object.keys(instance).length">
             <q-spinner-gears size="50px" color="primary" />
         </q-inner-loading>
@@ -80,28 +81,28 @@
                         right: 0,
                     },
                     // 提示配置
-            tooltip: {
-                // 是否显示工具提示
-                show: true,
-                // 通过轴触发
-                trigger: 'axis',
-                axisPointer: {
-                    type: 'cross',
-                    label: {
-                        backgroundColor: 'rgba(0, 0, 0, .5)',
-                        formatter: values => this.tools.formatFlow(values.value)
+                    tooltip: {
+                        // 是否显示工具提示
+                        show: true,
+                        // 通过轴触发
+                        trigger: 'axis',
+                        axisPointer: {
+                            type: 'cross',
+                            label: {
+                                backgroundColor: 'rgba(0, 0, 0, .5)',
+                                formatter: values => this.tools.formatFlow(values.value)
+                            },
+                            lineStyle: {
+                                color: 'rgba(0, 0, 0, .3)',
+                            },
+                            shadowStyle: {
+                                color: 'rgba(0, 0, 0, .3)',
+                            },
+                            crossStyle: {
+                                color: 'rgba(0, 0, 0, .3)',
+                            },
+                        },
                     },
-                    lineStyle: {
-                        color: 'rgba(0, 0, 0, .3)',
-                    },
-                    shadowStyle: {
-                        color: 'rgba(0, 0, 0, .3)',
-                    },
-                    crossStyle: {
-                        color: 'rgba(0, 0, 0, .3)',
-                    },
-                },
-            },
                     xAxis: {
                         show: false,
                         type: 'category',

@@ -55,7 +55,7 @@
         methods: {
             async ping() {
                 this.pingLoading = true
-                const { time }   = (await ping.promise.probe(this.instance.main_ip))
+                const { time }   = (await ping.promise.probe(this.instance.main_ip, { timeout: 1 }))
                 this.pingTime    = time === 'unknown' ? 'Timeout' : time + 'ms'
                 this.pingLoading = false
             },

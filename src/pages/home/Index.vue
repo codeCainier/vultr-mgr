@@ -21,9 +21,18 @@
             </div>
 
             <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
-                <bindwidth-card :bandwidth="bandwidth" 
+                <bindwidth-card class="q-mb-md"
+                                :bandwidth="bandwidth"
                                 :instance="instance"
                                 :loading="loading"/>
+                <ping-chart class="q-mb-md"
+                            ref="pingChart" 
+                            :instance="instance"
+                            @change="arr => $refs.timeoutChart.pingArrAll = arr"/>
+                <timeout-chart ref="timeoutChart" :instance="instance"/>
+            </div>
+
+            <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
             </div>
         </div>
     </q-page>
@@ -34,6 +43,8 @@
     import instancesList from 'src/components/instancesList'
     import bindWidthCard from 'src/components/bindwidthCard'
     import instanceDetail from 'src/components/instanceDetail'
+    import pingChart from 'src/components/pingChart'
+    import timeoutChart from 'src/components/timeoutChart'
     import startupScript from 'src/assets/startup'
 
     const { NodeSSH } = require('node-ssh')
@@ -45,6 +56,8 @@
             'instances-list': instancesList,
             'bindwidth-card': bindWidthCard,
             'instance-detail': instanceDetail,
+            'ping-chart': pingChart,
+            'timeout-chart': timeoutChart,
         },
         data() {
             return {
@@ -115,7 +128,7 @@
                         this.notify.success('操作成功')
                     },
                 })
-            }
+            },
         },
         created() {
         }
