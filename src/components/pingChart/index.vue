@@ -33,13 +33,24 @@
         },
         data() {
             return {
+                // 单次 ping 等待时间
                 pingTime: '-',
+                // ping 间隔
                 interval: 1000,
+                // ping 等待时间数组
+                // length 超出阈值后删除第一位，保证长度固定
                 pingArr: [],
+                // 全部 ping 等待时间数组
                 pingArrAll: [],
+                // ping 等待时间总和
+                // 单独计算，防止每一次 ping 都进行整个数组求和
                 pingArrTotal: 0,
+                // ping 数组限制长度
                 pingArrLimit: 30,
+                // ping 计时器
                 timer: '',
+                // echarts 图表
+                chart: '',
             }
         },
         watch: {
@@ -51,6 +62,8 @@
             }
         },
         computed: {
+            // 平均延迟
+            // ping 等待时间总和 / 成功 ping 次数
             average() {
                 return () => {
                     const effect = this.pingArrAll.filter(item => item)
@@ -64,16 +77,17 @@
                 this.pingArr = []
                 this.pingArrAll = []
                 this.pingArrTotal = 0
+
                 clearInterval(this.timer)
-                this.timer = setInterval(() => {
-                    this.ping()
-                }, this.interval)
+
+                this.timer = setInterval(() => this.ping(), this.interval)
             },
             async ping() {
                 if (this.pingArr.length === this.pingArrLimit) this.pingArr.splice(0, 1)
 
                 const { time }   = (await ping.promise.probe(this.instance.main_ip, { timeout: this.interval / 1000 }))
                 const timeFormat = time === 'unknown' ? 0 : time
+
                 this.pingTime = timeFormat ? `${time}ms` : 'Timeout'
                 this.pingArr.push(timeFormat)
                 this.pingArrAll.push(timeFormat)
@@ -81,8 +95,6 @@
                 this.pingRander()
             },
             pingRander() {
-                const dom    = this.$refs['chart-ping']
-                const chart  = this.echarts.init(dom)
                 const option = {
                     animation: this.pingArr.length !== this.pingArrLimit,
                     grid: {
@@ -106,10 +118,11 @@
                         smooth: true
                     }]
                 }
-                chart.setOption(option)
+                this.chart.setOption(option)
             },
         },
-        created() {
+        mounted() {
+            this.chart = this.echarts.init(this.$refs['chart-ping'])
         }
     }
 </script>

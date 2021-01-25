@@ -33,38 +33,42 @@
             </div>
 
             <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+                <sftp :instance="instance" :ssh="ssh" :sshStatus="sshStatus"/>
             </div>
         </div>
     </q-page>
 </template>
 
 <script>
-    import userInfo from 'src/components/userInfo'
-    import instancesList from 'src/components/instancesList'
-    import bindWidthCard from 'src/components/bindwidthCard'
+    import userInfo       from 'src/components/userInfo'
+    import instancesList  from 'src/components/instancesList'
+    import bindWidthCard  from 'src/components/bindwidthCard'
     import instanceDetail from 'src/components/instanceDetail'
-    import pingChart from 'src/components/pingChart'
-    import timeoutChart from 'src/components/timeoutChart'
-    import startupScript from 'src/assets/startup'
+    import pingChart      from 'src/components/pingChart'
+    import timeoutChart   from 'src/components/timeoutChart'
+    import sftp           from 'src/components/sftp'
+    import startupScript  from 'src/assets/startup'
 
     const { NodeSSH } = require('node-ssh')
 
     export default {
         name: 'Home',
         components: {
-            'user-info': userInfo,
-            'instances-list': instancesList,
-            'bindwidth-card': bindWidthCard,
+            'user-info'      : userInfo,
+            'instances-list' : instancesList,
+            'bindwidth-card' : bindWidthCard,
             'instance-detail': instanceDetail,
-            'ping-chart': pingChart,
-            'timeout-chart': timeoutChart,
+            'ping-chart'     : pingChart,
+            'timeout-chart'  : timeoutChart,
+            sftp             : sftp,
         },
         data() {
             return {
                 bandwidth: {},
                 instance: {},
                 loading: false,
-                ssh: '',
+                sshStatus: false,
+                ssh: {},
             }
         },
         computed: {
@@ -90,6 +94,7 @@
                 })
             },
             sshLogin(password) {
+                this.sshStatus = false
                 this.ssh = new NodeSSH()
                 this.ssh.connect({
                     host: this.instance.main_ip,
@@ -102,10 +107,10 @@
                     },
                 })
                 .then(() => {
-                    console.log('login success')
+                    this.sshStatus = true
                     this.getDiskStatus()
                 })
-                .catch((err) => {
+                .catch(err => {
                     console.log(err)
                 })
             },
