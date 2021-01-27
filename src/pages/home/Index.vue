@@ -97,10 +97,12 @@
                 this.sshStatus = false
                 this.ssh = new NodeSSH()
                 this.ssh.connect({
-                    host: this.instance.main_ip,
+                    // host: this.instance.main_ip,
+                    host: '192.168.0.241',
                     username: 'root',
                     port: '22',
-                    password,
+                    // password,
+                    password: 'srunsoft@xian',
                     tryKeyboard: true,
                     onKeyboardInteractive: (name, instructions, instructionsLang, prompts, finish) => {
                         if (prompts.length > 0 && prompts[0].prompt.toLowerCase().includes('password')) finish([password])

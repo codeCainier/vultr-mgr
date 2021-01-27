@@ -3,6 +3,9 @@ import { Dialog, extend } from 'quasar'
 import CryptoJS from 'crypto-js'
 
 function confirm(obj) {
+    if (typeof obj === 'string') obj = {
+        message: obj
+    }
     Dialog.create({
         title: obj.title || '提示',
         message: obj.message || '',
